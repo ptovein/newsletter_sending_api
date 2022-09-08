@@ -1,0 +1,20 @@
+services:
+  my_db:
+    container_name: news_letter_db
+    hostname: nws_ltr_api
+    image: postgres
+    expose:
+      - "54322"
+    ports:
+      - "54321:5432"
+    restart: unless-stopped
+    env_file:
+      - dbcredentials.env
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  app:
+    container_name: newsletter_api
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    ports: 
+      - "8000:3000"
