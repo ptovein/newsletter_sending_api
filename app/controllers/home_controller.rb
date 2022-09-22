@@ -94,14 +94,9 @@ class HomeController < ApplicationController
     el_news_letter = NewsLetter.find_by(id: params[:news_letter_id])
     table_join = Recipients.joins("INNER JOIN news_letter_recipients ON news_letter_recipients.news_letter_id=#{params[:news_letter_id]} AND recipients.id = news_letter_recipients.recipient_id")
 
-    emails_to_send = []
     table_join.each do |obj|
-      emails_to_send.push(obj.email_address)
       NewsLetterMailer.send_email2(email: obj.email_address, news_letter_id: params[:news_letter_id]).deliver_now
     end
-
-    # find the emails here and call this function as many times as emails are
-    # NewsLetterMailer.send_email2(email: params[:news_letter_id]).deliver_now
   end
 
   def news_letter_ids
