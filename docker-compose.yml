@@ -1,7 +1,6 @@
 services:
   my_db:
-    container_name: news_letter_db
-    hostname: nws_ltr_api
+    container_name: news_letter_db_1
     image: postgres
     expose:
       - "54322"
@@ -13,7 +12,7 @@ services:
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   app:
-    container_name: newsletter_api
+    container_name: newsletter_api_1
     build: .
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
     ports: 

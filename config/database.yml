@@ -3,20 +3,20 @@ default: &default
   encoding: unicode
   database: news_letter_api_db
   pool: 5
-  host: nws_ltr_api
+  host: news_letter_db_1
   port: 5432
   username: postgres
-  password: 
+  password: 0
 
 development:
   adapter: postgresql
   encoding: unicode
   database: news_letter_api_db
   pool: 5
-  host: nws_ltr_api
+  host: news_letter_db_1
   port: 5432
   username: postgres
-  password: 
+  password: 0
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -30,7 +30,7 @@ production:
   encoding: unicode
   database: news_letter_api_db
   pool: 5
-  host: nws_ltr_api
+  host: news_letter_db_1
   port: 5432
   username: postgres
-  password: 
+  password: 0
