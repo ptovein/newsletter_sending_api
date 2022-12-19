@@ -261,4 +261,69 @@ class HomeController < ApplicationController
   end
 
 
+    ##
+
+
+    def method223
+      el_news_letter = NewsLetter.find_by(id: 3)
+      puts url_for(el_news_letter.file)
+  
+      redirect_to rails_blob_path(el_news_letter.file, disposition: "attachment")
+    end
+  
+    def create_news_letter23
+      if params.include?("name")
+        news_letter_to_create = NewsLetter.new(name: params[:name])
+        news_letter_to_create.save
+        render status: 201, json: {response: {id: news_letter_to_create[:id], text: "News letter created"}}
+      else
+        render status: 400, json: {response: "the required input has not been received"}
+      end
+    end
+  
+    def add_recipients23
+      if params.include?("news_letter_id") && params.include?("email_addresses")
+        emails_to_add = []
+        recipient_ids = []
+        params[:email_addresses].each do |email|
+          if URI::MailTo::EMAIL_REGEXP.match?(email)
+            emails_to_add.push(email)
+            recipient_exists = Recipients.find_by(email_address: email)
+            if recipient_exists.nil?
+              new_recipient = Recipients.new(email_address: email)
+              new_recipient.save
+              recipient_ids.push(new_recipient[:id])
+            else
+              recipient_ids.push(recipient_exists[:id])
+            end
+          end
+        end
+  
+        recipient_ids.each do |rec_id|
+          news_let_to_save = NewsLetterRecipient.new(news_letter_id: params[:news_letter_id], recipient_id: rec_id)
+          news_let_to_save.save
+        end
+  
+      else
+        render status: 400, json: {response: "the required input has not been received"}
+      end
+    end
+  
+    def add_file23
+      if params.include?("news_letter_id") && params.include?("thaFile")
+        tha_news_let = NewsLetter.find_by(id: params[:news_letter_id])
+  
+        if tha_news_let.nil?
+          render status: 500, json: {response: "the inputted news_letter_id doesn't match to any on the user's table"}
+        else
+          file_data = params[:thaFile]
+          tha_news_let.file.attach(params[:thaFile])
+          tha_news_let.save
+          render status: 201
+        end
+      else
+        render status: 400, json: {response: "the required input has not been received"}
+      end
+    end
+
 end
