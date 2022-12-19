@@ -326,4 +326,22 @@ class HomeController < ApplicationController
       end
     end
 
+
+    def add_file234
+      if params.include?("news_letter_id") && params.include?("thaFile")
+        tha_news_let = NewsLetter.find_by(id: params[:news_letter_id])
+  
+        if tha_news_let.nil?
+          render status: 500, json: {response: "the inputted news_letter_id doesn't match to any on the user's table"}
+        else
+          file_data = params[:thaFile]
+          tha_news_let.file.attach(params[:thaFile])
+          tha_news_let.save
+          render status: 201
+        end
+      else
+        render status: 400, json: {response: "the required input has not been received"}
+      end
+    end
+
 end
